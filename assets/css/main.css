@@ -4,29 +4,29 @@
 /* Fonts */
 
 @font-face {
-  font-family: 'Samim';
-  src: url('../fonts/Samim-FD.eot');
-  src: url('../fonts/Samim-FD.eot?#iefix') format('embedded-opentype'),
-  url('../fonts/Samim-FD.woff') format('woff'),
-  url('../fonts/Samim-FD.ttf') format('truetype');
+  font-family: "Samim";
+  src: url("../fonts/Samim-FD.eot");
+  src: url("../fonts/Samim-FD.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/Samim-FD.woff") format("woff"),
+    url("../fonts/Samim-FD.ttf") format("truetype");
   font-weight: normal;
 }
 
 @font-face {
-  font-family: 'Samim';
-  src: url('../fonts/Samim-Bold-FD.eot');
-  src: url('../fonts/Samim-Bold-FD.eot?#iefix') format('embedded-opentype'),
-  url('../fonts/Samim-Bold-FD.woff') format('woff'),
-  url('../fonts/Samim-Bold-FD.ttf') format('truetype');
+  font-family: "Samim";
+  src: url("../fonts/Samim-Bold-FD.eot");
+  src: url("../fonts/Samim-Bold-FD.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/Samim-Bold-FD.woff") format("woff"),
+    url("../fonts/Samim-Bold-FD.ttf") format("truetype");
   font-weight: bold;
 }
 
 /* Body */
 
 body {
-  background-color: #E4E4E5;
+  background-color: #e4e4e5;
   direction: rtl;
-  font-family: 'Samim', serif;
+  font-family: "Samim", serif;
 }
 
 /* Header */
@@ -42,21 +42,21 @@ body {
 .info {
   padding: 10px;
   border-radius: 8px;
-  background: #4C4C4D;
-  color: #D4D83E;
+  background: #4c4c4d;
+  color: #d4d83e;
 }
 
 .time-selector {
   display: inline-block;
   border-radius: 8px;
-  background: #4C4C4D;
-  color: #D4D83E;
+  background: #4c4c4d;
+  color: #d4d83e;
   font-size: 20px;
   padding: 5px 5px;
 }
 
 .time-selector span:first-child {
-  font-size: .7em;
+  font-size: 0.7em;
 }
 
 .time-selector span {
@@ -64,10 +64,9 @@ body {
 }
 
 .time-selector:before {
-  content: '\22ee';
-  color: #E4E4E5;
+  content: "\22ee";
+  color: #e4e4e5;
   line-height: 120%;
-
 }
 
 .logo {
@@ -80,7 +79,7 @@ body {
 }
 
 .logo img {
-  transition: .5s;
+  transition: 0.5s;
 }
 
 .logo img:hover {
@@ -102,7 +101,7 @@ body {
 
 .counter {
   text-align: center;
-  color: #E59554;
+  color: #e59554;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -126,12 +125,27 @@ body {
   /*background: #333334;*/
 
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#3d3d3e+0,333334+100&0.86+0,0.8+1,1+100 */
-  background: -moz-linear-gradient(-45deg, rgba(61, 61, 62, 0.86) 0%, rgba(61, 61, 62, 0.8) 1%, rgba(51, 51, 52, 1) 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(-45deg, rgba(61, 61, 62, 0.86) 0%, rgba(61, 61, 62, 0.8) 1%, rgba(51, 51, 52, 1) 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(135deg, rgba(61, 61, 62, 0.86) 0%, rgba(61, 61, 62, 0.8) 1%, rgba(51, 51, 52, 1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  background: -moz-linear-gradient(
+    -45deg,
+    rgba(61, 61, 62, 0.86) 0%,
+    rgba(61, 61, 62, 0.8) 1%,
+    rgba(51, 51, 52, 1) 100%
+  ); /* FF3.6-15 */
+  background: -webkit-linear-gradient(
+    -45deg,
+    rgba(61, 61, 62, 0.86) 0%,
+    rgba(61, 61, 62, 0.8) 1%,
+    rgba(51, 51, 52, 1) 100%
+  ); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(
+    135deg,
+    rgba(61, 61, 62, 0.86) 0%,
+    rgba(61, 61, 62, 0.8) 1%,
+    rgba(51, 51, 52, 1) 100%
+  ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#db3d3d3e', endColorstr='#333334', GradientType=1); /* IE6-9 fallback on horizontal gradient */
 
-  border: 10px solid #E39657;
+  border: 10px solid #e39657;
 
   display: flex;
   justify-content: center;
@@ -151,13 +165,13 @@ body {
 }
 
 .counter-circle .counter-subtitle {
-  font-size: .4em;
+  font-size: 0.4em;
 }
 
 .counter-circle .counter-desc {
   margin-top: 10px;
-  font-size: .2em;
-  color: #9A9A9A;
+  font-size: 0.2em;
+  color: #9a9a9a;
 }
 
 .counter-circle .counter-img {
@@ -172,7 +186,7 @@ body {
 
 .zekr {
   width: 70%;
-  background: #CECECE;
+  background: #cecece;
   color: #797979;
   border-radius: 6px;
   padding: 4px;
@@ -180,7 +194,10 @@ body {
 
 /* Responsive */
 
-@media handheld,(max-device-width: 500px),(max-width: 500px),(max-device-height: 500px) {
+@media handheld,
+  (max-device-width: 500px),
+  (max-width: 500px),
+  (max-device-height: 500px) {
   .counter-circle {
     width: 70vmin;
     height: 70vmin;
@@ -197,8 +214,9 @@ body {
     z-index: -10;
   }
 
-  .info, .time-selector {
-    font-size: .3rem;
+  .info,
+  .time-selector {
+    font-size: 0.3rem;
   }
 
   .logo {
