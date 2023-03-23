@@ -7,6 +7,7 @@ const localStorageAvailable = typeof localStorage !== "undefined";
 
 export const store = createStore({
   strict: false,
+
   state() {
     return {
       city: {
