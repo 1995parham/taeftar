@@ -26,7 +26,7 @@
         target="_blank"
         rel="noopener"
       >
-        <img src="~/assets/img/fandogh.png" width="50px" height="50px" alt="" />
+        <img src="~/assets/img/fandogh.png" width="50" height="50" alt="" />
       </a>
     </div>
   </div>
