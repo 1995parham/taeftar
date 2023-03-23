@@ -1,4 +1,4 @@
-export default {
+export default defineNuxtConfig({
   mode: "spa",
 
   loading: {
@@ -26,6 +26,4 @@ export default {
   css: ["~/assets/css/circle.css", "~/assets/css/main.css"],
 
   plugins: [{ src: "~/plugins/vuex.ts" }],
-
-  modules: [],
-};
+});
