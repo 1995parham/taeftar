@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import { getTimes } from "../lib/pray";
+import { getTimes, PrayTimes } from "../lib/pray";
 import { cities, City } from "../lib/cities";
 
 const localStorageAvailable = typeof localStorage !== "undefined";
@@ -15,8 +15,8 @@ interface State {
   loadingCity: boolean;
   use_hour: boolean;
   times: {
-    tomorrow: any;
-    today: any;
+    tomorrow: PrayTimes | null;
+    today: PrayTimes | null;
   };
   seconds: number;
   minutes: number;
@@ -37,8 +37,8 @@ export const store = createStore({
       loadingCity: false,
       use_hour: true,
       times: {
-        today: {},
-        tomorrow: {},
+        today: null,
+        tomorrow: null,
       },
       seconds: 0,
       minutes: 0,
@@ -68,9 +68,9 @@ export const store = createStore({
       const now = new Date();
 
       const next_events: { to: string; diff: number }[] = [
-        { to: "سحر", diff: new Date(state.times.today.fajr) - now },
-        { to: "افطار", diff: new Date(state.times.today.maghrib) - now },
-        { to: "سحر", diff: new Date(state.times.tomorrow.fajr) - now },
+        { to: "سحر", diff: new Date(state.times.today?.fajr) - now },
+        { to: "افطار", diff: new Date(state.times.today?.maghrib) - now },
+        { to: "سحر", diff: new Date(state.times.tomorrow?.fajr) - now },
       ];
       for (const next_event of next_events) {
         if (next_event.diff >= 0) {
