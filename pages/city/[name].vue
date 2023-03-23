@@ -1,9 +1,9 @@
 <script setup>
-  import Cities from '~/lib/cities'
+  import { cities } from '~/lib/cities'
 
   definePageMeta({
     validate: (route) => {
-      return Boolean(Cities[route.params.name]);
+      return Boolean(cities[route.params.name]);
     }
   })
 </script>
