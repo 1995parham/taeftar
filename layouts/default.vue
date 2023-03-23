@@ -7,7 +7,7 @@
         <span>{{$store.state.city.name}}</span>
       </div>
 
-      <div class="info static" v-if="available">
+      <div class="info static" v-if="$store.state.city.loc[0] && $store.state.city.loc[1]">
         <span>اذان مغرب : </span>
         <span>{{$store.state.times.today['maghribo']}}</span>
         <br/>
@@ -37,19 +37,3 @@
     border-bottom: 3px solid #E39657;
   }
 </style>
-
-<script setup>
-  import {mapMutations, mapActions, mapGetters} from 'vuex'
-  import Cities from '../lib/cities'
-
-  let methods = {
-    ...mapActions(['updateCity'])
-  }
-
-  let computed = {
-    cities() {
-      return Cities
-    },
-    ...mapGetters(['available'])
-  }
-</script>
