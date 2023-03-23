@@ -1,35 +1,52 @@
 import { createStore } from "vuex";
 import { getTimes } from "../lib/pray";
-import Cities from "../lib/cities";
-import Axios from "axios";
+import { cities, City } from "../lib/cities";
 
 const localStorageAvailable = typeof localStorage !== "undefined";
+
+interface LabeledValue {
+  lbl: string;
+  val: number;
+}
+
+interface State {
+  r: LabeledValue[];
+  city: City;
+  loadingCity: boolean;
+  use_hour: boolean;
+  times: {
+    tomorrow: any;
+    today: any;
+  };
+  seconds: number;
+  minutes: number;
+  hours: number;
+  to: string;
+  diff: number;
+}
 
 export const store = createStore({
   strict: false,
 
-  state() {
+  state(): State {
     return {
       city: {
         name: "",
-        loc: [],
+        loc: [0, 0],
       },
       loadingCity: false,
       use_hour: true,
       times: {
-        today: 0,
-        tomorrow: 0,
+        today: {},
+        tomorrow: {},
       },
-      r: [],
+      seconds: 0,
+      minutes: 0,
+      hours: 0,
+      r: Array<LabeledValue>(),
       to: "",
       diff: 0,
     };
-  },
-
-  getters: {
-    available(state) {
-      return Boolean(state.city.loc[0] && state.city.loc[1]);
-    },
   },
 
   mutations: {
@@ -42,36 +59,38 @@ export const store = createStore({
         city.loc
       );
     },
+
     toggleUseHour(state) {
       state.use_hour = !state.use_hour;
     },
+
     update(state) {
       const now = new Date();
-      const s = [
+
+      const next_events: { to: string; diff: number }[] = [
         { to: "سحر", diff: new Date(state.times.today.fajr) - now },
         { to: "افطار", diff: new Date(state.times.today.maghrib) - now },
         { to: "سحر", diff: new Date(state.times.tomorrow.fajr) - now },
       ];
-
-      for (const ss of s) {
-        if (ss.diff >= 0) {
-          state.to = ss.to;
-          state.diff = ss.diff;
+      for (const next_event of next_events) {
+        if (next_event.diff >= 0) {
+          state.to = next_event.to;
+          state.diff = next_event.diff;
           break;
         }
       }
 
-      // Sec
-      state.seconds = parseInt(state.diff / 1000);
+      // difference in seconds
+      state.seconds = Math.round(state.diff / 1000);
 
-      // Min
-      state.minutes = parseInt(state.seconds / 60);
-      state.seconds -= state.minutes * 60;
+      // convert difference into minutes
+      state.minutes = Math.floor(state.seconds / 60);
+      state.seconds = state.seconds % 60;
 
-      // Hour
+      // convert difference into hourss
       if (state.use_hour) {
-        state.hours = parseInt(state.minutes / 60);
-        state.minutes -= state.hours * 60;
+        state.hours = Math.floor(state.minutes / 60);
+        state.minutes = state.minutes % 60;
       }
 
       // R
@@ -90,7 +109,7 @@ export const store = createStore({
       commit("update");
     },
     async updateCity({ commit, dispatch }, city) {
-      let _city = Cities[city];
+      let _city = cities[city];
 
       const commitCity = () => {
         commit("setCity", _city);
@@ -117,16 +136,12 @@ export const store = createStore({
       }
 
       // 2. Use navigator API for more precise location
-      let navigatorLoaded = false;
-
       if (navigator && navigator.geolocation) {
         try {
           const ua = navigator.userAgent.toLowerCase();
           const isAndroid = ua.indexOf("android") > -1;
           navigator.geolocation.getCurrentPosition(
             (position) => {
-              navigatorLoaded = true;
-
               _city.loc = [position.coords.latitude, position.coords.longitude];
               _city.name = "موقعیت فعلی";
               console.log("Using geolocation!");
