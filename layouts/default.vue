@@ -1,16 +1,6 @@
 <template>
   <div class="app-container">
     <div class="header">
-      <!--<router-link-->
-      <!--v-for="city,key in cities"-->
-      <!--:to="`/${key}`"-->
-      <!--:key="key"-->
-      <!--:exact="true"-->
-      <!--class="city-link"-->
-      <!--active-class="active"-->
-      <!--&gt;-->
-      <!--{{ city.name }}-->
-      <!--</router-link>-->
 
       <div class="time-selector static">
         <span>به وقت</span>
