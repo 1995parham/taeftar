@@ -16,7 +16,7 @@
       </div>
     </div>
 
-    <nuxt></nuxt>
+    <slot></slot>
 
     <div class="logo">
       <a href="https://github.com/fandogh/taeftar" target="_blank" rel="noopener">
@@ -38,19 +38,18 @@
   }
 </style>
 
-<script>
+<script setup>
   import {mapMutations, mapActions, mapGetters} from 'vuex'
   import Cities from '../lib/cities'
 
-  export default {
-    methods: {
-      ...mapActions(['updateCity'])
+  let methods = {
+    ...mapActions(['updateCity'])
+  }
+
+  let computed = {
+    cities() {
+      return Cities
     },
-    computed: {
-      cities() {
-        return Cities
-      },
-      ...mapGetters(['available'])
-    }
+    ...mapGetters(['available'])
   }
 </script>
