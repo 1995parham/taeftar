@@ -36,14 +36,14 @@
 
 <script>
   import {mapMutations, mapActions, mapGetters} from 'vuex'
-  import Cities from '../lib/cities'
+  import Cities from '../../lib/cities'
 
   export default {
     validate({params: {city = ''}}) {
       return Boolean(Cities[city]);
     },
     async mounted() {
-      await this.updateCity(this.$route.params.city || '')
+      await this.updateCity(this.$route.params.name || '')
       this.timer = setInterval(this.update.bind(this), 1000);
     },
     methods: {
