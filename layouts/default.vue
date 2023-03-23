@@ -19,8 +19,8 @@
     <slot></slot>
 
     <div class="logo">
-      <a href="https://github.com/fandogh/taeftar" target="_blank" rel="noopener">
-        <img src="~assets/img/fandogh.png" width="50px" height="50px" alt=""/>
+      <a href="https://github.com/1995parham/taeftar" target="_blank" rel="noopener">
+        <img src="~/assets/img/fandogh.png" width="50px" height="50px" alt=""/>
       </a>
     </div>
   </div>
