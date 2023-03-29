@@ -63,12 +63,6 @@ body {
   margin: 0 1px;
 }
 
-.time-selector:before {
-  content: "\22ee";
-  color: #e4e4e5;
-  line-height: 120%;
-}
-
 .logo.right {
   z-index: 9999;
   position: absolute;
