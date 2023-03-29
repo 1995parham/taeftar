@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="header">
       <div class="time-selector static">
-        <span>به وقت</span>
+        <span>به وقت </span>
         <span>{{ $store.state.city.name }}</span>
       </div>
 
