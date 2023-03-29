@@ -69,10 +69,20 @@ body {
   line-height: 120%;
 }
 
-.logo {
+.logo.right {
   z-index: 9999;
   position: absolute;
   bottom: 5px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.logo.left {
+  z-index: 9999;
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
   display: flex;
   flex-direction: column;
   text-align: center;

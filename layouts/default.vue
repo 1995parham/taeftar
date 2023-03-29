@@ -20,13 +20,20 @@
 
     <slot></slot>
 
-    <div class="logo">
-      <a
-        href="https://github.com/1995parham/taeftar"
-        target="_blank"
-        rel="noopener"
-      >
+    <div class="logo right">
+      <a href="https://github.com/fandogh" target="_blank" rel="noopener">
         <img src="~/assets/img/fandogh.png" width="50" height="50" alt="" />
+      </a>
+    </div>
+
+    <div class="logo left">
+      <a href="https://github.com/1995parham" target="_blank" rel="noopener">
+        <img
+          src="~/assets/img/1995parham-logo.svg"
+          width="75"
+          height="50"
+          alt=""
+        />
       </a>
     </div>
   </div>
