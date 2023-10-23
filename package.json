@@ -12,6 +12,6 @@
   },
   "devDependencies": {
     "@nuxt/kit": "^3.8.0",
-    "nuxt": "^3.7.4"
+    "nuxt": "^3.8.0"
   }
 }
