@@ -11,7 +11,7 @@
     "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "@nuxt/kit": "^3.9.1",
+    "@nuxt/kit": "^3.10.3",
     "nuxt": "^3.10.2"
   }
 }
