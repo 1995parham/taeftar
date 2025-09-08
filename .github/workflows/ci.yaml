@@ -37,7 +37,7 @@ jobs:
           echo "manager=npm" >> "$GITHUB_OUTPUT"
           echo "command=ci" >> "$GITHUB_OUTPUT"
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: current
           cache: ${{ steps.detect-package-manager.outputs.manager }}
