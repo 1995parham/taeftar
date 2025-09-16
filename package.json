@@ -7,11 +7,11 @@
     "start": "nuxt start"
   },
   "dependencies": {
-    "axios": "^1.11.0",
+    "axios": "^1.12.2",
     "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "@nuxt/kit": "^4.1.1",
-    "nuxt": "^4.1.1"
+    "@nuxt/kit": "^4.1.2",
+    "nuxt": "^4.1.2"
   }
 }
