@@ -1,5 +1,13 @@
 {
   "name": "taeftar",
+  "version": "1.0.0",
+  "description": "Ta Eftar - Ramadan countdown timer showing time remaining until Iftar for cities in Iran",
+  "author": "Parham Alvani <parham.alvani@gmail.com>",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/1995parham/taeftar.git"
+  },
   "scripts": {
     "dev": "nuxt dev",
     "build": "nuxt build",

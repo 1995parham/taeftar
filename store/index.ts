@@ -1,6 +1,7 @@
 import { createStore } from "vuex";
 import { getTimes, PrayTimes } from "../lib/pray";
-import { cities, City } from "../lib/cities";
+import { cities } from "../lib/cities";
+import type { City } from "../lib/cities";
 
 const localStorageAvailable = typeof localStorage !== "undefined";
 
@@ -120,7 +121,6 @@ export const store = createStore({
       };
 
       if (city && city.length) {
-        console.log("Using predefined location!");
         commit("setCity", _city);
         commit("update");
         return;
@@ -130,9 +130,16 @@ export const store = createStore({
 
       // 1. Try to load from cache
       if (localStorageAvailable) {
-        Object.assign(_city, JSON.parse(localStorage.getItem("currentCity")));
-        console.log("Using local storage cache!");
-        commitCity();
+        try {
+          const cached = localStorage.getItem("currentCity");
+          if (cached) {
+            Object.assign(_city, JSON.parse(cached));
+            commitCity();
+          }
+        } catch (e) {
+          // Clear invalid data
+          localStorage.removeItem("currentCity");
+        }
       }
 
       // 2. Use navigator API for more precise location
@@ -144,11 +151,10 @@ export const store = createStore({
             (position) => {
               _city.loc = [position.coords.latitude, position.coords.longitude];
               _city.name = "موقعیت فعلی";
-              console.log("Using geolocation!");
               commitCity();
             },
-            (err) => {
-              console.error(err);
+            () => {
+              // Geolocation error - silently fail
             },
             {
               timeout: isAndroid ? 15000 : 5000,
@@ -156,7 +162,7 @@ export const store = createStore({
             }
           );
         } catch (e) {
-          console.error(e);
+          // Geolocation not supported - silently fail
         }
       }
     },

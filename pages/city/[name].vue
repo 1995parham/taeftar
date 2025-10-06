@@ -12,10 +12,22 @@ definePageMeta({
 import { mapMutations, mapActions, mapGetters } from "vuex";
 
 export default {
+  data() {
+    return {
+      timer: null,
+    };
+  },
+
   mounted() {
-    console.log("Mounted");
     this.updateCity(this.$route.params.name || "");
     this.timer = setInterval(this.update.bind(this), 1000);
+  },
+
+  beforeUnmount() {
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = null;
+    }
   },
 
   methods: {
