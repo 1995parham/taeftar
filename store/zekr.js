@@ -1,12 +1,27 @@
 import zekr from '../lib/zekr';
 
+function getRamadanDay() {
+  const now = new Date();
+  const parts = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+  }).formatToParts(now);
+
+  const month = parseInt(parts.find(p => p.type === 'month').value);
+  const day = parseInt(parts.find(p => p.type === 'day').value);
+
+  // Ramadan is the 9th month of the Islamic calendar
+  if (month === 9 && day >= 1 && day <= 30) {
+    return String(day);
+  }
+
+  return null;
+}
+
 export default {
   state() {
-    // FIXME: This calculates days since May 17, 2018 (Ramadan 1439 AH start date).
-    // Ramadan dates change yearly based on the Islamic lunar calendar.
-    // This approach will not work correctly for future Ramadan months.
-    // TODO: Implement proper Hijri calendar calculation to determine current Ramadan day.
-    const today = String(Math.ceil(Math.abs(Date.now() - new Date('5/17/2018')) / (1000 * 3600 * 24)));
-    return zekr[today];
+    const day = getRamadanDay();
+    return day ? zekr[day] : null;
   }
 }

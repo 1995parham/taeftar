@@ -11,7 +11,7 @@ export interface Cities {
 export const cities: Cities = {
   "": {
     name: "موقعیت فعلی",
-    loc: [0, 0],
+    loc: [35.715298, 51.404343],
     current: true,
   },
   tehran: {

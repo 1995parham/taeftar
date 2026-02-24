@@ -120,13 +120,15 @@ export const store = createStore({
         }
       };
 
+      // Always commit immediately so the countdown renders right away
+      commit("setCity", _city);
+      commit("update");
+
       if (city && city.length) {
-        commit("setCity", _city);
-        commit("update");
         return;
       }
 
-      // Progressivly find Current location
+      // Progressively find current location (upgrade from Tehran default)
 
       // 1. Try to load from cache
       if (localStorageAvailable) {

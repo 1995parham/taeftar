@@ -5,7 +5,7 @@ export default defineNuxtConfig({
     baseURL: "/taeftar",
   },
 
-  css: ["~/assets/css/circle.css", "~/assets/css/main.css"],
+  css: ["~/assets/css/main.css"],
 
   plugins: [{ src: "~/plugins/vuex.ts" }],
 });
