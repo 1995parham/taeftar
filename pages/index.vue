@@ -1,3 +1,3 @@
 <script setup lang="ts">
-navigateTo("/city/", { replace: true });
+await navigateTo("/city/", { replace: true });
 </script>
