@@ -24,7 +24,8 @@
 /* Body */
 
 body {
-  background-color: #e4e4e5;
+  background: url("/background.jpg") no-repeat center center fixed;
+  background-size: cover;
   direction: rtl;
   font-family: "Samim", serif;
 }
