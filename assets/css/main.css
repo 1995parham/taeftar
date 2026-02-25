@@ -63,6 +63,29 @@ body {
   margin: 0 1px;
 }
 
+.location-source {
+  font-size: 0.5em;
+  background: rgba(212, 216, 62, 0.2);
+  color: #d4d83e;
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.city-search-input {
+  font-family: "Samim", serif;
+  font-size: 0.8em;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #d4d83e;
+  color: #d4d83e;
+  outline: none;
+  width: 100px;
+  direction: rtl;
+  padding: 0 2px;
+}
+
 .logo.right {
   z-index: 9999;
   position: absolute;

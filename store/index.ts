@@ -13,6 +13,7 @@ interface LabeledValue {
 interface State {
   r: LabeledValue[];
   city: City;
+  locationSource: string;
   use_hour: boolean;
   times: {
     tomorrow: PrayTimes | null;
@@ -37,6 +38,19 @@ async function reversGeocode(lat: number, lon: number): Promise<string | null> {
   }
 }
 
+async function ipGeolocate(): Promise<{ lat: number; lon: number } | null> {
+  try {
+    const res = await fetch("https://ipwho.is/");
+    const data = await res.json();
+    if (data.success && data.latitude && data.longitude) {
+      return { lat: data.latitude, lon: data.longitude };
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 export const store = createStore({
   strict: false,
 
@@ -46,6 +60,7 @@ export const store = createStore({
         name: "",
         loc: [0, 0],
       },
+      locationSource: "",
       use_hour: true,
       times: {
         today: null,
@@ -73,6 +88,10 @@ export const store = createStore({
 
     setCityName(state, name: string) {
       state.city.name = name;
+    },
+
+    setLocationSource(state, source: string) {
+      state.locationSource = source;
     },
 
     toggleUseHour(state) {
@@ -126,16 +145,18 @@ export const store = createStore({
     async updateCity({ commit }) {
       const city: City = { ...defaultCity };
 
-      const commitCity = () => {
-        commit("setCity", city);
+      const commitCity = (source: string) => {
+        commit("setCity", { ...city });
+        commit("setLocationSource", source);
         commit("update");
         if (localStorageAvailable) {
           localStorage.setItem("currentCity", JSON.stringify(city));
+          localStorage.setItem("locationSource", source);
         }
       };
 
       // Show Tehran countdown immediately
-      commitCity();
+      commitCity("پیش‌فرض");
 
       // 1. Try to load from cache
       if (localStorageAvailable) {
@@ -143,15 +164,32 @@ export const store = createStore({
           const cached = localStorage.getItem("currentCity");
           if (cached) {
             Object.assign(city, JSON.parse(cached));
-            commitCity();
+            const cachedSource = localStorage.getItem("locationSource") || "ذخیره شده";
+            commitCity(cachedSource === "پیش‌فرض" ? "ذخیره شده" : cachedSource);
           }
         } catch (e) {
-          // Clear invalid data
           localStorage.removeItem("currentCity");
+          localStorage.removeItem("locationSource");
         }
       }
 
-      // 2. Use navigator API for more precise location
+      // 2. IP geolocation via ipwho.is
+      const ipResult = await ipGeolocate();
+      if (ipResult) {
+        city.loc = [ipResult.lat, ipResult.lon];
+        commitCity("آی‌پی");
+
+        const name = await reversGeocode(ipResult.lat, ipResult.lon);
+        if (name) {
+          city.name = name;
+          commit("setCityName", name);
+          if (localStorageAvailable) {
+            localStorage.setItem("currentCity", JSON.stringify(city));
+          }
+        }
+      }
+
+      // 3. Use navigator API for more precise location
       if (navigator && navigator.geolocation) {
         try {
           const ua = navigator.userAgent.toLowerCase();
@@ -159,9 +197,8 @@ export const store = createStore({
           navigator.geolocation.getCurrentPosition(
             async (position) => {
               city.loc = [position.coords.latitude, position.coords.longitude];
-              commitCity();
+              commitCity("جی‌پی‌اس");
 
-              // 3. Reverse geocode to get city name
               const name = await reversGeocode(city.loc[0], city.loc[1]);
               if (name) {
                 city.name = name;
@@ -182,6 +219,33 @@ export const store = createStore({
         } catch (e) {
           // Geolocation not supported - silently fail
         }
+      }
+    },
+
+    async searchCity({ commit }, cityName: string) {
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(cityName)}&format=json&limit=1&accept-language=fa`,
+        );
+        const data = await res.json();
+        if (data && data.length > 0) {
+          const result = data[0];
+          const city: City = {
+            name: result.display_name.split(",")[0].trim(),
+            loc: [parseFloat(result.lat), parseFloat(result.lon)],
+          };
+          commit("setCity", city);
+          commit("setLocationSource", "جستجو");
+          commit("update");
+          if (localStorageAvailable) {
+            localStorage.setItem("currentCity", JSON.stringify(city));
+            localStorage.setItem("locationSource", "جستجو");
+          }
+          return true;
+        }
+        return false;
+      } catch {
+        return false;
       }
     },
   },

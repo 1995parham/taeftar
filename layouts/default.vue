@@ -3,7 +3,25 @@
     <div class="header">
       <div class="time-selector static">
         <span>به وقت </span>
-        <span>{{ $store.state.city.name }}</span>
+        <span
+          v-if="!isSearching"
+          class="city-name"
+          @click="startSearch"
+        >{{ $store.state.city.name }}</span>
+        <input
+          v-else
+          ref="searchInput"
+          v-model="searchQuery"
+          class="city-search-input"
+          placeholder="نام شهر..."
+          @keydown.enter="submitSearch"
+          @keydown.esc="cancelSearch"
+          @blur="cancelSearch"
+        />
+        <span
+          v-if="$store.state.locationSource"
+          class="location-source"
+        >{{ $store.state.locationSource }}</span>
       </div>
 
       <div
@@ -39,14 +57,46 @@
   </div>
 </template>
 
-<style>
-.city-link {
-  text-decoration: none;
-  color: #e39657;
-  margin-right: 10px;
+<script setup lang="ts">
+import { ref, nextTick } from "vue";
+import { useStore } from "vuex";
+
+const store = useStore();
+const isSearching = ref(false);
+const searchQuery = ref("");
+const searchInput = ref<HTMLInputElement | null>(null);
+
+function startSearch() {
+  isSearching.value = true;
+  searchQuery.value = "";
+  nextTick(() => {
+    searchInput.value?.focus();
+  });
 }
 
-.city-link.active {
-  border-bottom: 3px solid #e39657;
+async function submitSearch() {
+  const query = searchQuery.value.trim();
+  if (!query) {
+    cancelSearch();
+    return;
+  }
+  const success = await store.dispatch("searchCity", query);
+  isSearching.value = false;
+  searchQuery.value = "";
+}
+
+function cancelSearch() {
+  isSearching.value = false;
+  searchQuery.value = "";
+}
+</script>
+
+<style>
+.city-name {
+  cursor: pointer;
+}
+
+.city-name:hover {
+  border-bottom: 2px solid #d4d83e;
 }
 </style>
