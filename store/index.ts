@@ -1,6 +1,6 @@
 import { createStore } from "vuex";
 import { getTimes, PrayTimes } from "../lib/pray";
-import { cities } from "../lib/cities";
+import { defaultCity } from "../lib/cities";
 import type { City } from "../lib/cities";
 
 const localStorageAvailable = typeof localStorage !== "undefined";
@@ -13,7 +13,6 @@ interface LabeledValue {
 interface State {
   r: LabeledValue[];
   city: City;
-  loadingCity: boolean;
   use_hour: boolean;
   times: {
     tomorrow: PrayTimes | null;
@@ -26,6 +25,18 @@ interface State {
   diff: number;
 }
 
+async function reversGeocode(lat: number, lon: number): Promise<string | null> {
+  try {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=fa`,
+    );
+    const data = await res.json();
+    return data.address?.city || data.address?.town || data.address?.state || null;
+  } catch {
+    return null;
+  }
+}
+
 export const store = createStore({
   strict: false,
 
@@ -35,7 +46,6 @@ export const store = createStore({
         name: "",
         loc: [0, 0],
       },
-      loadingCity: false,
       use_hour: true,
       times: {
         today: null,
@@ -57,8 +67,12 @@ export const store = createStore({
       state.times.today = getTimes(now, city.loc);
       state.times.tomorrow = getTimes(
         new Date(now.getTime() + 24 * 60 * 60 * 1000),
-        city.loc
+        city.loc,
       );
+    },
+
+    setCityName(state, name: string) {
+      state.city.name = name;
     },
 
     toggleUseHour(state) {
@@ -109,33 +123,26 @@ export const store = createStore({
       commit("toggleUseHour");
       commit("update");
     },
-    async updateCity({ commit, dispatch }, city) {
-      let _city = cities[city];
+    async updateCity({ commit }) {
+      const city: City = { ...defaultCity };
 
       const commitCity = () => {
-        commit("setCity", _city);
+        commit("setCity", city);
         commit("update");
         if (localStorageAvailable) {
-          localStorage.setItem("currentCity", JSON.stringify(_city));
+          localStorage.setItem("currentCity", JSON.stringify(city));
         }
       };
 
-      // Always commit immediately so the countdown renders right away
-      commit("setCity", _city);
-      commit("update");
-
-      if (city && city.length) {
-        return;
-      }
-
-      // Progressively find current location (upgrade from Tehran default)
+      // Show Tehran countdown immediately
+      commitCity();
 
       // 1. Try to load from cache
       if (localStorageAvailable) {
         try {
           const cached = localStorage.getItem("currentCity");
           if (cached) {
-            Object.assign(_city, JSON.parse(cached));
+            Object.assign(city, JSON.parse(cached));
             commitCity();
           }
         } catch (e) {
@@ -150,10 +157,19 @@ export const store = createStore({
           const ua = navigator.userAgent.toLowerCase();
           const isAndroid = ua.indexOf("android") > -1;
           navigator.geolocation.getCurrentPosition(
-            (position) => {
-              _city.loc = [position.coords.latitude, position.coords.longitude];
-              _city.name = "موقعیت فعلی";
+            async (position) => {
+              city.loc = [position.coords.latitude, position.coords.longitude];
               commitCity();
+
+              // 3. Reverse geocode to get city name
+              const name = await reversGeocode(city.loc[0], city.loc[1]);
+              if (name) {
+                city.name = name;
+                commit("setCityName", name);
+                if (localStorageAvailable) {
+                  localStorage.setItem("currentCity", JSON.stringify(city));
+                }
+              }
             },
             () => {
               // Geolocation error - silently fail
@@ -161,7 +177,7 @@ export const store = createStore({
             {
               timeout: isAndroid ? 15000 : 5000,
               maximumAge: 60 * 60 * 1000,
-            }
+            },
           );
         } catch (e) {
           // Geolocation not supported - silently fail
