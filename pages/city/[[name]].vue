@@ -3,7 +3,7 @@ import { cities } from "~/lib/cities";
 
 definePageMeta({
   validate: (route) => {
-    return Boolean(cities[route.params.name]);
+    return Boolean(cities[route.params.name ?? ""]);
   },
 });
 </script>
